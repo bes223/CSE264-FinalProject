@@ -2,6 +2,35 @@ $(document).ready(function() {
     const container = $(".container");
     const gridSize = 9;
     let board = [];
+    let timerInterval;
+    let seconds = 0;
+    let minutes = 0;
+
+    function startTimer() {
+        timerInterval = setInterval(updateTimer, 1000);
+    }
+
+    function stopTimer() {
+        clearInterval(timerInterval);
+    }
+
+    function resetTimer() {
+        seconds = 0;
+        minutes = 0;
+        updateTimer();
+    }
+
+    function updateTimer() {
+        seconds++;
+        if (seconds == 60) {
+            seconds = 0;
+            minutes++;
+        }
+        const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
+        const formattedSeconds = seconds < 10 ? '0' + seconds : seconds;
+        const timerDisplay = document.querySelector('#timer');
+        timerDisplay.textContent = formattedMinutes + ':' + formattedSeconds;
+    }
     
     function createBoard(puzzle) {
         container.empty();
@@ -182,14 +211,17 @@ $(document).ready(function() {
     }
     
     function newGame() {
-        const numFilledCells = 35;
+        const numFilledCells = 40;
         const puzzle = generatePuzzle(numFilledCells);
         createBoard(puzzle);
+        resetTimer();
+        startTimer();
       }
     
     function solve() {
         if (solveBoard(board)) {
             updateBoard();
+            stopTimer();
         } else {
             alert("No solution found!");
         }
@@ -247,6 +279,7 @@ $(document).ready(function() {
         const isComplete = isBoardComplete(board);
       
         if (isValid && isComplete) {
+            stopTimer();
             alert("Congratulations! Your solution is correct.");
         } else if (isValid && !isComplete) {
             alert("Your solution is partially correct. Keep going!");
@@ -293,6 +326,7 @@ $(document).ready(function() {
     $("[data-action='validate']").on("click", validate);
   
     // Create an initial game board
+    resetTimer();
     newGame();
 
   });

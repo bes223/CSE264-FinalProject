@@ -1,57 +1,96 @@
 :root {
-    --primary: #4C9689;
+    --primary: #c973af;
     --invalid: #e74c3c;
 }
 
 body {
     margin: 0;
+    margin-top: 100px;
     font-family: sans-serif;
-    background-color: #4D394B;
+    background-color: #2aaeda;
     display: flex;
     align-items: center;
     justify-content: center;
 }
-      
+
 .sudoku-container {
-    border: 4px solid #1D131E;
+    border: 4px solid white;
     padding: 0 2px;
 }
-      
-.sudoku-container input {
-    width: 40px;
-    height: 40px;
+
+.sudoku-grid {
+    border-collapse: collapse;
+    border: 5px solid white;
+    width: 800px;
+    height: 800px;
+    margin: 0 auto;
+}
+
+.sudoku-grid td {
+    border: 3px solid #182173;
+    width: 50px;
+    height: 50px;
     text-align: center;
-    font-size: 20px;
-    padding: 0;
-    border: 3px solid #2E222D;
-    background-color: #2E222D;
+    vertical-align: middle;
+}
+
+.sudoku-grid tr {
+    border: 3px solid #182173;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.sudoku-grid input {
+    width: 100%;
+    height: 100%;
+    font-size: 40px;
+    text-align: center;
+    border: none;
+    outline: none;
+    background-color: #194d88;
     color: #eee;
 }
-      
-.sudoku-container input:focus {
-    border-color: #4C9689;
-  }
-  
-  .sudoku-container input.highlight {
+
+.sudoku-grid input:focus {
+    border-color: var(--primary);
+}
+
+.sudoku-grid input.highlight {
     background-color: #29B6F6;
     border-color: #29B6F6;
-  }
-  
-  .sudoku-container input.disabled {
+}
+
+.sudoku-grid input.disabled {
     cursor: not-allowed;
-    background-color: #4C9689;
-    border-color: #4C9689;
-  }
-  
-  .sudoku-container .invalid {
-    border-color: #e74c3c;
-  }
-  
-  .btn {
-    background-color: #4C9689;
-    box-shadow: inset 0 -3px darken(#4C9689, 10%);
-  }
-  
-  #controls {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+.sudoku-grid input.invalid {
+    border-color: var(--invalid);
+}
+
+.sudoku-grid tr:nth-child(3n) td {
+    border-bottom: 5px solid white;
+}
+
+.sudoku-grid td:nth-child(3n) {
+    border-right: 8px solid white;
+}
+
+.btn {
+    background-color: var(--primary);
+    width: 200px;
+    height: 100px;
+    display: block;
+    margin-bottom: 10px;
+    font-size:xx-large;
+}
+
+#controls {
     margin: 20px 0;
-  }
+}
+
+

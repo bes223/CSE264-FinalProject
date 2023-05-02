@@ -34,36 +34,36 @@ $(document).ready(function() {      // declaring global variables
     }
     
     function createBoard(puzzle) {
-        container.empty();          // originally container is empty
+        container.empty();          // empty the container to get rid of any existing sudoku board
         board = new Array(gridSize).fill(null).map(() => new Array(gridSize).fill(null));           // creates the blank grid
-        const table = $('<table>').addClass('sudoku-grid');     // adds sudoku grid styles
+        const table = $('<table>').addClass('sudoku-grid');     // creates table element with sudoku-grid class styles 
       
-        for (let i = 0; i < gridSize; i++) {            // creating the grid with td and tr
-            const row = $('<tr>');
+        for (let i = 0; i < gridSize; i++) {            // loop through grid with nested for loop      
+            const row = $('<tr>');                  
             for (let j = 0; j < gridSize; j++) {
-                const input = $("<input>", {
+                const input = $("<input>", {            // creating input element set to current row and column, with maxlength of 1 to only allow single-digit inputs
                     type: "text",
-                    maxlength: 1,           // only one number can be entered in each cell
+                    maxlength: 1,           
                     "data-row": i,
                     "data-col": j
                 });
     
-                const cell = $('<td>');         // declares the cell
+                const cell = $('<td>');        
     
-                if (puzzle[i][j] !== null) {        // if there is already a number in the cell then it is disabled and cannot be clicked
-                    input.val(puzzle[i][j]);
-                    input.attr("disabled", true);
-                    input.addClass("disabled");
-                    board[i][j] = puzzle[i][j];         // now setting the board equal to the puzzle
+                if (puzzle[i][j] !== null) {       // if there is already a number in the cell
+                    input.val(puzzle[i][j]);            // change the input element value to the cell value
+                    input.attr("disabled", true);       // disable input
+                    input.addClass("disabled");         // add disabled class for styling
+                    board[i][j] = puzzle[i][j];         // update board variable with cell value
                 }
     
-                input.on("input", function() {              // calls on input styles to be able to input numbers
-                    const value = parseInt($(this).val(), 10);
-                    if (value >= 1 && value <= gridSize) {      // can only enter numbers between 1 and 9
-                        board[i][j] = value;            // if the number is eligible, enter it in the cell
-                    } else {
-                        $(this).val("");            // if the number is not eligible, cannot be entered
-                        board[i][j] = null;
+                input.on("input", function() {                      // adding input event handler for each input element 
+                    const value = parseInt($(this).val(), 10);      // enables update of board when user inputs a number
+                    if (value >= 1 && value <= gridSize) {          // check if input value is between 1 and 0
+                        board[i][j] = value;                        // if it is, update the board  
+                    } else {                                        // if it is not
+                        $(this).val("");                            // clear the input value        
+                        board[i][j] = null;                         // set the cell to null
                     }
                 });
     
@@ -234,31 +234,31 @@ $(document).ready(function() {      // declaring global variables
         let col = -1;
         let isEmpty = true;
       
-        for (let i = 0; i < gridSize; i++) {        // checking that values are filled
-            for (let j = 0; j < gridSize; j++) {
-                if (puzzle[i][j] === null) {
+        for (let i = 0; i < gridSize; i++) {        // looks for empty cells
+            for (let j = 0; j < gridSize; j++) {    // moves through the grid looking for an empty cell
+                if (puzzle[i][j] === null) {        // if an empty cell is found then initialize row, col, and isEmpty
                     row = i;
                     col = j;
                     isEmpty = false;
                     break;
                 }
             }
-            if (!isEmpty) {                    
+            if (!isEmpty) {                         // if no empty cells are found, break out of for loop         
                 break;
             }
         }
       
-        if (isEmpty) {       // if it is empty then break out of for loop
+        if (isEmpty) {       // isEmpty is true, that means the puzzle is solved
             return true;
         }
       
-        for (let num = 1; num <= gridSize; num++) {
-            if (isValidMove(puzzle, row, col, num)) {
-                puzzle[row][col] = num;
-                if (solveBoard(puzzle)) {
+        for (let num = 1; num <= gridSize; num++) {         // if there is an empty cell
+            if (isValidMove(puzzle, row, col, num)) {       // check for any valid moves that can be done
+                puzzle[row][col] = num;                     // loop through 1 through 9 and check if there are any valid moves to be made
+                if (solveBoard(puzzle)) {                   // if there is a valiv move, set the cell value to the current number and call solveBoard() recursively
                     return true;
                 } else {
-                    puzzle[row][col] = null;
+                    puzzle[row][col] = null;                // if there is no valid move yet, then set the cell value to null and move onto new empty cell
                 }
             }
         }
@@ -266,21 +266,21 @@ $(document).ready(function() {      // declaring global variables
     }
       
     function updateBoard() {
-        for (let i = 0; i < gridSize; i++) {
+        for (let i = 0; i < gridSize; i++) {        // looping through gridSize rows and columns
             for (let j = 0; j < gridSize; j++) {
-                const input = $(`.container input[data-row="${i}"][data-col="${j}"]`);
-                input.val(board[i][j]);
+                const input = $(`.container input[data-row="${i}"][data-col="${j}"]`);      // select input element with jQuery selector that matches data-row and data-col
+                input.val(board[i][j]);         // update the value of the input element with the value from the board array at the same position
             }
         }
     }
       
     
     function validate() {
-        const isValid = isBoardValid(board);
+        const isValid = isBoardValid(board);                // call validation and completion functions to check if board is correct and complete
         const isComplete = isBoardComplete(board);
       
-        if (isValid && isComplete) {
-            stopTimer();
+        if (isValid && isComplete) {                // show corresponding alert
+            stopTimer();                            // if board is correct and complete, then stop the timer
             alert("Congratulations! Your solution is correct.");
         } else if (isValid && !isComplete) {
             alert("Your solution is partially correct. Keep going!");
@@ -291,38 +291,38 @@ $(document).ready(function() {      // declaring global variables
       
     function isBoardValid(puzzle) {
         const gridSize = 9;
-        for (let i = 0; i < gridSize; i++) {
+        for (let i = 0; i < gridSize; i++) {            // loop through grid using nested for loops
             for (let j = 0; j < gridSize; j++) {
-                if (puzzle[i][j] !== null) {
-                    const value = puzzle[i][j];
-                    puzzle[i][j] = null;
-                    if (!isValidMove(puzzle, i, j, value)) {
-                        puzzle[i][j] = value;
+                if (puzzle[i][j] !== null) {            // check that the current cell being examined is not empty
+                    const value = puzzle[i][j];         // set value equal to current value of the cell
+                    puzzle[i][j] = null;                // temporarily set cell value to null
+                    if (!isValidMove(puzzle, i, j, value)) {        // check to see if the stored value is valid and correct
+                        puzzle[i][j] = value;       // if it is not correct, then put the value back in the cell and return false
                         return false;
                     }
-                    puzzle[i][j] = value;
+                    puzzle[i][j] = value;           // if it is correct, then return the value
                 }
             }
         }   
-        return true;
+        return true;            // if all values have been checked and determined correct, return true
     }
       
     function isBoardComplete(puzzle) {
         const gridSize = 9;
       
-        for (let i = 0; i < gridSize; i++) {
+        for (let i = 0; i < gridSize; i++) {            // loop through grid with nested for loop
             for (let j = 0; j < gridSize; j++) {
-                if (puzzle[i][j] === null) {
+                if (puzzle[i][j] === null) {            // if current cell being examined is null (no value) then return false
                     return false;
                 }
             }
         }
-        return true;
+        return true;            // if no null cells are found then return true 
     }
       
     
     // Button click event handlers
-    $("[data-action='newGame']").on("click", newGame);
+    $("[data-action='newGame']").on("click", newGame); 
     $("[data-action='solve']").on("click", solve);
     $("[data-action='validate']").on("click", validate);
   

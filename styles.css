@@ -13,6 +13,23 @@ body {
     position: relative;
     padding: 0 2px;
 }
+
+ .sudoku-container::before, .sudoku-container::after {
+    position: absolute;
+    border-style: solid;
+}
+
+.sudoku-container::before {
+    width: 156px;
+    border-width: 0 4px;
+    border-color: black;
+}
+
+ .sudoku-container::after {
+    height: 156px;
+    border-width: 4px 0;
+    border-color: black;
+}
       
 .sudoku-container input {
     width: 40px;

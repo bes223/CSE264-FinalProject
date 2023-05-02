@@ -32,6 +32,24 @@ $(document).ready(function() {      // declaring global variables
         const timerDisplay = document.querySelector('#timer');              // calls on querySelector in order to properly format timer
         timerDisplay.textContent = formattedMinutes + ':' + formattedSeconds;       // displays timer
     }
+
+    // CREATING/UPDATING BOARD FUNCTIONS
+    function updateBoard() {
+        for (let i = 0; i < gridSize; i++) {        // looping through gridSize rows and columns
+            for (let j = 0; j < gridSize; j++) {
+                const input = $(`.container input[data-row="${i}"][data-col="${j}"]`);      // select input element with jQuery selector that matches data-row and data-col
+                input.val(board[i][j]);         // update the value of the input element with the value from the board array at the same position
+            }
+        }
+    }
+
+    function newGame() {
+        const numFilledCells = 40;          // can be changed to whatever level of difficulty is preferred
+        const puzzle = generatePuzzle(numFilledCells);      // generate the puzzle using the desired number of filled cells
+        createBoard(puzzle);            // create the board
+        resetTimer();           // reset the timer so that only one timer is occurring at a time
+        startTimer();           // start the timer when the player starts the game
+    }
     
     function createBoard(puzzle) {
         container.empty();          // empty the container to get rid of any existing sudoku board
@@ -179,46 +197,8 @@ $(document).ready(function() {      // declaring global variables
         }
         return array;
     }
-      
-
-    function isValidMove(puzzle, row, col, value) {
-        const gridSize = 9;
-      
-        // Check row
-        for (let i = 0; i < gridSize; i++) {            // if the cell is the only cell with that specific value in the row, then continue
-            if (puzzle[row][i] === value) {             // if there are two cells with the same value in the same row, return false
-                return false;
-            }
-        }
-      
-        // Check column
-        for (let i = 0; i < gridSize; i++) {            // if the cell is the only cell with that specific value in the column, then continue
-            if (puzzle[i][col] === value) {             // if there are two cells with the same value in the same column, return false
-                return false;
-            }
-        }
-      
-        // Check box
-        const boxRow = Math.floor(row / 3) * 3;         // find the space of the box to be checked
-        const boxCol = Math.floor(col / 3) * 3;
-        for (let i = boxRow; i < boxRow + 3; i++) {     // use nested for loop to check all rows and columns in the box for two cells with the same value
-            for (let j = boxCol; j < boxCol + 3; j++) {
-                if (puzzle[i][j] === value) {
-                    return false;                       // if two are found, return false
-                }
-            }
-        }
-        return true;            // if row, column, and box are all good, then return true
-    }
     
-    function newGame() {
-        const numFilledCells = 40;          // can be changed to whatever level of difficulty is preferred
-        const puzzle = generatePuzzle(numFilledCells);      // generate the puzzle using the desired number of filled cells
-        createBoard(puzzle);            // create the board
-        resetTimer();           // reset the timer so that only one timer is occurring at a time
-        startTimer();           // start the timer when the player starts the game
-      }
-    
+    // SOLVE BOARD FUNCTIONS
     function solve() {
         if (solveBoard(board)) {            // if the board is solved then
             updateBoard();                  // update the board with the solution values
@@ -265,16 +245,7 @@ $(document).ready(function() {      // declaring global variables
         return false;
     }
       
-    function updateBoard() {
-        for (let i = 0; i < gridSize; i++) {        // looping through gridSize rows and columns
-            for (let j = 0; j < gridSize; j++) {
-                const input = $(`.container input[data-row="${i}"][data-col="${j}"]`);      // select input element with jQuery selector that matches data-row and data-col
-                input.val(board[i][j]);         // update the value of the input element with the value from the board array at the same position
-            }
-        }
-    }
-      
-    
+    // VALIDATION FUNCTIONS
     function validate() {
         const isValid = isBoardValid(board);                // call validation and completion functions to check if board is correct and complete
         const isComplete = isBoardComplete(board);
@@ -306,7 +277,39 @@ $(document).ready(function() {      // declaring global variables
         }   
         return true;            // if all values have been checked and determined correct, return true
     }
+
+    function isValidMove(puzzle, row, col, value) {
+        const gridSize = 9;
       
+        // Check row
+        for (let i = 0; i < gridSize; i++) {            // if the cell is the only cell with that specific value in the row, then continue
+            if (puzzle[row][i] === value) {             // if there are two cells with the same value in the same row, return false
+                return false;
+            }
+        }
+      
+        // Check column
+        for (let i = 0; i < gridSize; i++) {            // if the cell is the only cell with that specific value in the column, then continue
+            if (puzzle[i][col] === value) {             // if there are two cells with the same value in the same column, return false
+                return false;
+            }
+        }
+      
+        // Check box
+        const boxRow = Math.floor(row / 3) * 3;         // find the space of the box to be checked
+        const boxCol = Math.floor(col / 3) * 3;
+        for (let i = boxRow; i < boxRow + 3; i++) {     // use nested for loop to check all rows and columns in the box for two cells with the same value
+            for (let j = boxCol; j < boxCol + 3; j++) {
+                if (puzzle[i][j] === value) {
+                    return false;                       // if two are found, return false
+                }
+            }
+        }
+        return true;            // if row, column, and box are all good, then return true
+    }
+    
+
+    // COMPLETION FUNCTIONS
     function isBoardComplete(puzzle) {
         const gridSize = 9;
       

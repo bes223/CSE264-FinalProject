@@ -133,6 +133,7 @@ $(document).ready(function() {      // declaring global variables
             return false;
         }
         fillBoard(solvedBoard, 0, 0);           // filling the board and checking for solution
+        resetTimer();
         return solvedBoard;                     // return the solved board
     }
       
@@ -254,6 +255,7 @@ $(document).ready(function() {      // declaring global variables
       
         if (isValid && isComplete) {                // show corresponding alert
             stopTimer();                            // if board is correct and complete, then stop the timer
+            resetTimer();
             alert("Congratulations! Your solution is correct.");
         } else if (isValid && !isComplete) {
             alert("Your solution is partially correct. Keep going!");

@@ -209,6 +209,8 @@ $(document).ready(function() {      // declaring global variables
     }
       
     function solveBoard(puzzle) {       // solves using backtracking
+    // https://stackoverflow.com/questions/19969978/sudoku-solving-algorithm-with-back-tracking
+    // stack overflow recursive backtracking article used for pointers
         const gridSize = 9;
         let row = -1;
         let col = -1;
